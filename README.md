@@ -1,50 +1,46 @@
+<a href="https://github.com/yamamoto7"><picture><source media="(prefers-color-scheme: dark)" srcset="works/hero-dark.svg"><img src="works/hero-light.svg" alt="Hi, I'm yamamoto7. Software engineer. I fix things in open source." width="100%"></picture></a>
+
 # README lab
 
-Experiments for the article "GitHub READMEで、どこまでリッチなカードを作れるか": what a GitHub README can render, tested on github.com.
-Each section shows one technique. Switch GitHub's theme, resize the window or open this page on a phone to see them react.
+**Everything on this page is a plain image in a README.** No JavaScript, no CSS, no external server.
+GitHub strips `<style>` and `<script>`, so each piece is an SVG that animates, follows your theme, adapts to your screen and links where you click.
 
-## 1. Theme switching
+Switch GitHub's theme, resize the window or open this page on your phone. The pieces react.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="img/theme-picture-dark.svg"><img src="img/theme-picture-light.svg" alt="picture theme test" width="495"></picture>
+## Aurora
 
-<img src="img/theme-inner.svg" alt="theme inside the SVG" width="495">
+The banner at the top. Blurred light drifts behind the name, stars twinkle and a shooting star crosses now and then.
 
-<img src="img/theme-picture-dark.svg#gh-dark-mode-only" alt="legacy dark fragment" width="495">
-<img src="img/theme-picture-light.svg#gh-light-mode-only" alt="legacy light fragment" width="495">
+- Dark and light are two SVGs picked by `<picture>`, so they follow the theme set on GitHub.
+- On a phone, the SVG notices it is rendered narrow and swaps to a large-type layout. One file, no extra markup.
+- Motion stops for people who ask their OS to reduce it.
 
-## 2. Responsive
+Source: [`hero-dark.svg`](works/hero-dark.svg) · [`hero-light.svg`](works/hero-light.svg)
 
-<img src="img/responsive-inner.svg" alt="responsive inside the SVG" width="495">
+## Terminal
 
-<picture><source media="(max-width: 600px)" srcset="img/responsive-narrow.svg"><img src="img/responsive-wide.svg" alt="responsive picture" width="495"></picture>
+<a href="https://github.com/yamamoto7/oss-activity-card"><picture><img src="works/terminal.svg" alt="A terminal typing whoami and listing merged pull requests" width="100%"></picture></a>
 
-<picture><source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="img/compound-dark-narrow.svg"><source media="(prefers-color-scheme: dark)" srcset="img/compound-dark.svg"><img src="img/compound-light.svg" alt="compound media query" width="495"></picture>
+Commands type themselves out, character by character, and the results scroll in. Reload the page to replay it.
 
-## 3. Touch or mouse
+- Typing is a cover that shrinks in steps, one step per character, with a caret riding along.
+- Each line appears on its own delay. All CSS, inside the SVG.
 
-<picture><source media="(hover: none)" srcset="img/pointer-touch.svg"><img src="img/pointer-mouse.svg" alt="pointer test" width="495"></picture>
+Source: [`terminal.svg`](works/terminal.svg)
 
-## 4. Animation
+## Bento
 
-<img src="img/anim.svg" alt="CSS animation" width="495">
+<a href="https://github.com/yamamoto7/oss-activity-card"><picture><source media="(prefers-color-scheme: dark)" srcset="works/bento-oss-dark.svg"><img src="works/bento-oss-light.svg" alt="Open source: 14 merged PRs in 10 organizations" width="66.666%"></picture></a><a href="https://github.com/yamamoto7"><picture><source media="(prefers-color-scheme: dark)" srcset="works/bento-me-dark.svg"><img src="works/bento-me-light.svg" alt="yamamoto7: follow on GitHub" width="33.333%"></picture></a><a href="https://github.com/yamamoto7/readme-lab"><picture><source media="(prefers-color-scheme: dark)" srcset="works/bento-now-dark.svg"><img src="works/bento-now-light.svg" alt="Now building readme-lab" width="33.333%"></picture></a><a href="https://github.com/yamamoto7/oss-activity-card"><picture><source media="(prefers-color-scheme: dark)" srcset="works/bento-stack-dark.svg"><img src="works/bento-stack-light.svg" alt="Languages in my PRs" width="33.333%"></picture></a><a href="https://github.com/yamamoto7/readme-lab/tree/main/experiments"><picture><source media="(prefers-color-scheme: dark)" srcset="works/bento-theme-dark.svg"><img src="works/bento-theme-light.svg" alt="Theme: switch GitHub's theme to see" width="33.333%"></picture></a>
 
-<picture><source media="(prefers-reduced-motion: reduce)" srcset="img/anim-static.svg"><img src="img/countup.svg" alt="SMIL count-up" width="495"></picture>
+Every tile is its own image inside its own link, so **each tile is clickable**. Try it.
 
-## 5. foreignObject and web fonts
+- Widths are percentages, so the grid keeps its shape from a wide monitor down to a phone.
+- The bars rise, the ring spins and the dot pings. The theme tile shows a moon or a sun to match your GitHub theme.
 
-<img src="img/foreign.svg" alt="foreignObject" width="495">
+## Linked card
 
-<img src="img/webfont.svg" alt="embedded web font" width="495">
+A real-world piece: [oss-activity-card](https://github.com/yamamoto7/oss-activity-card) cuts a card into one image per row, wraps each row in a link and stacks them so they read as one card. See it on [my profile](https://github.com/yamamoto7).
 
-## 6. Expandable rows
+## How far can it go?
 
-<details><summary><picture><img src="img/details-summary.svg" alt="3 more PRs" width="495" align="left"></picture></summary>
-<a href="https://github.com/yamamoto7/readme-lab#1-theme-switching" title="Hidden row 1"><picture><img src="img/details-row-1.svg" alt="row 1" width="495" align="left"></picture></a>
-<a href="https://github.com/yamamoto7/readme-lab#2-responsive" title="Hidden row 2"><picture><img src="img/details-row-2.svg" alt="row 2" width="495" align="left"></picture></a>
-<a href="https://github.com/yamamoto7/readme-lab#3-touch-or-mouse" title="Hidden row 3"><picture><img src="img/details-row-3.svg" alt="row 3" width="495" align="left"></picture></a>
-<br clear="all">
-</details>
-
-## 7. Tooltips
-
-<a href="https://github.com/yamamoto7/oss-activity-card" title="title on the link: shown on hover"><picture><img src="img/pointer-mouse.svg" alt="tooltip test" title="title on the image" width="495"></picture></a>
+The [experiments](experiments) folder tests each building block on github.com: what the sanitizer keeps, which media queries work, animation, `foreignObject`, web fonts and expandable rows.
