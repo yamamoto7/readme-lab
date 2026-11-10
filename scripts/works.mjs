@@ -166,13 +166,31 @@ const B = {
   light: { bg: "#ffffff", card: "#f6f8fa", edge: "#d1d9e0", fg: "#1f2328", sub: "#59636e", glow: 0.35 },
 };
 const G = 8; // half gutter inside every tile
+// On a phone a tile renders at well under half its size, so each tile also carries a "mini" layout with
+// big type, swapped in by a width media query inside the SVG. Keyed by the tile's name.
+const MINI = {
+  oss: (t) => `<text x="40" y="150" style="font-size:120px;font-weight:800;letter-spacing:-4px;fill:${t.fg}">14</text>
+<text x="210" y="112" style="font-size:34px;font-weight:700;fill:${t.fg}">merged</text><text x="210" y="152" style="font-size:34px;font-weight:700;fill:${t.fg}">PRs</text>
+<text x="40" y="206" style="font-size:28px;fill:${t.sub}">in 10 orgs →</text>`,
+  me: (t) => `<g transform="translate(140 104)"><circle r="62" fill="url(#mono)"/><text y="18" text-anchor="middle" style="font-size:50px;font-weight:800;fill:#fff">Y7</text></g>
+<text x="140" y="212" text-anchor="middle" style="font-size:30px;font-weight:700;fill:${t.fg}">GitHub →</text>`,
+  now: (t) => `<circle cx="52" cy="62" r="14" fill="#3fb950"/>
+<text x="36" y="132" style="font-size:40px;font-weight:800;fill:${t.fg}">readme</text><text x="36" y="174" style="font-size:40px;font-weight:800;fill:${t.fg}">-lab</text>`,
+  stack: (t) => `<rect x="36" y="44" width="104" height="22" rx="4" fill="#00add8"/><rect x="142" y="44" width="44" height="22" rx="4" fill="#a97bff"/><rect x="188" y="44" width="56" height="22" rx="4" fill="#8b949e"/>
+<text x="36" y="136" style="font-size:52px;font-weight:800;fill:${t.fg}">Go</text><text x="36" y="180" style="font-size:32px;fill:${t.sub}">50% of PRs</text>`,
+  theme: (t) => `<text x="140" y="140" text-anchor="middle" style="font-size:96px">${t === B.dark ? "🌙" : "☀️"}</text>`,
+};
+let nextMini = null;
 function tile(theme, w, h, inner, extraDefs = "", extraStyle = "") {
   const t = B[theme];
+  const mini = nextMini;
+  nextMini = null;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
 <defs><clipPath id="k"><rect x="${G}" y="${G}" width="${w - 2 * G}" height="${h - 2 * G}" rx="16"/></clipPath>${extraDefs}</defs>
 <style>text{font-family:${SANS}}.t{font-size:13px;font-weight:600;letter-spacing:.06em;fill:${t.sub}}.a{fill:${t.sub};font-size:13px}
+.mini{display:none}@media (max-width:${Math.round(w * 0.7)}px){.full{display:none}.mini{display:inline}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}${extraStyle}</style>
-<g clip-path="url(#k)"><rect x="${G}" y="${G}" width="${w - 2 * G}" height="${h - 2 * G}" fill="${t.card}"/>${inner(t)}</g>
+<g clip-path="url(#k)"><rect x="${G}" y="${G}" width="${w - 2 * G}" height="${h - 2 * G}" fill="${t.card}"/><g class="full">${inner(t)}</g>${mini ? `<g class="mini">${mini(t)}</g>` : ""}</g>
 <rect x="${G + 0.5}" y="${G + 0.5}" width="${w - 2 * G - 1}" height="${h - 2 * G - 1}" rx="15.5" fill="none" stroke="${t.edge}"/>
 </svg>`;
 }
@@ -180,7 +198,7 @@ for (const theme of ["dark", "light"]) {
   // Big tile: merged PR count with rising bars.
   const bars = [3, 2, 2, 1, 1, 1, 1, 1, 1, 1]; // merged PRs per organization on the card
   out(
-    `bento-oss-${theme}`,
+    ((nextMini = MINI.oss), `bento-oss-${theme}`),
     tile(
       theme,
       560,
@@ -204,7 +222,7 @@ ${bars
   );
   // Profile tile: monogram with a rotating conic-like ring.
   out(
-    `bento-me-${theme}`,
+    ((nextMini = MINI.me), `bento-me-${theme}`),
     tile(
       theme,
       280,
@@ -224,7 +242,7 @@ ${bars
   );
   // Now tile: pulsing live dot.
   out(
-    `bento-now-${theme}`,
+    ((nextMini = MINI.now), `bento-now-${theme}`),
     tile(
       theme,
       280,
@@ -251,7 +269,7 @@ ${bars
     })
     .join("");
   out(
-    `bento-stack-${theme}`,
+    ((nextMini = MINI.stack), `bento-stack-${theme}`),
     tile(
       theme,
       280,
@@ -266,7 +284,7 @@ ${langs.map(([n, c, p], i) => `<g transform="translate(36 ${112 + i * 21})"><cir
   );
   // Theme tile: sun or moon, matching the theme it is shown in.
   out(
-    `bento-theme-${theme}`,
+    ((nextMini = MINI.theme), `bento-theme-${theme}`),
     tile(
       theme,
       280,
